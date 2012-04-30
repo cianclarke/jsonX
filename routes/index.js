@@ -12,7 +12,7 @@ exports.index = function(req, res){
 exports.json = function(req, res){
   var body = req.body,
   limit = (body.limit && body.limit<jsonLength) ? body.limit : 50,
-  fields = body.fields || [],
+  fields = body.fields || ['FirstName', 'LastName', 'Email'],
   returnType = body.type || "array";
   
   var data = (returnType==="array") ? [] : {};

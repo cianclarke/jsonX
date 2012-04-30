@@ -5,6 +5,7 @@
     <link rel='stylesheet' href='/css/style.css' />
     <link rel='stylesheet' href='/bootstrap/less/bootstrap.css' />
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <script src="/js/jsonX.js"></script>
     <script src="bootstrap/js/bootstrap.js"></script>
   </head>
   <body>
@@ -31,9 +32,9 @@
       
       <label>Return Type</label>
       <div class="btn-group" data-toggle="buttons-radio">
-        <div class="btn">Left</div>
-        <div class="btn">Middle</div>
-        <div class="btn">Right</div>
+        <div class="btn type active">Array [ ]</div>
+        <div class="btn type">Map { }</div>
+        <input type="hidden" name="type" value="array">
       </div><br />
       
       <label>Limit</label>
