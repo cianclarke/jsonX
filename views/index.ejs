@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/css/style.css' />
+    <link rel='stylesheet' href='/bootstrap/less/bootstrap.css' />
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <script src="bootstrap/js/bootstrap.js"></script>
+  </head>
+  <body>
+    <h1><%= title %></h1>
+    <p>Welcome to <%= title %></p>
+    <form method="post" action="/json" class="form-horizontal">
+      <fieldset>
+      
+      <label>Fields (Cmd+Click for multiple)</label>
+      <select name="fields" multiple="multiple" id="multiSelect">
+                  <option>FirstName</option>
+                  <option>LastName</option>
+                  <option>Fullname</option>
+                  <option>Company</option>
+                  <option>Address</option>
+                  <option>City</option>
+                  <option>State</option>
+                  <option>ZIP</option>
+                  <option>Phone</option>
+                  <option>Fax</option>
+                  <option>Email</option>
+                  <option>Web Address</option>
+      </select><br />
+      
+      <label>Return Type</label>
+      <div class="btn-group" data-toggle="buttons-radio">
+        <div class="btn">Left</div>
+        <div class="btn">Middle</div>
+        <div class="btn">Right</div>
+      </div><br />
+      
+      <label>Limit</label>
+      <input type="number" name="limit" value="50" min="1" max="5000" /><br /><br />
+
+      <button type="submit" class="btn btn-primary">Generate JSON</button>
+      </fieldset>
+    </form>
+  </body>
+</html>
