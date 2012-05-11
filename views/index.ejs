@@ -14,7 +14,19 @@
     <form method="post" action="/json" class="form-horizontal">
       <fieldset>
       
-      <label>Fields (Cmd+Click for multiple)</label>
+
+      <legend>Personal Details</legend>
+
+      <% fields.forEach(function(field){ %>
+          <label class="checkbox">
+            <input type="checkbox" id="<%= field %>" name="fields" value="<%= field %>">
+            <%= field %>
+          </label>
+      <% }) %>
+
+
+      </fieldset>
+     <!-- <fieldset>
       <select name="fields" multiple="multiple" id="multiSelect">
                   <option>FirstName</option>
                   <option>LastName</option>
@@ -28,7 +40,7 @@
                   <option>Fax</option>
                   <option>Email</option>
                   <option>Web Address</option>
-      </select><br />
+      </select><br />-->
       
       <label>Return Type</label>
       <div class="btn-group" data-toggle="buttons-radio">
