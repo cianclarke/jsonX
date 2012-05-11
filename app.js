@@ -21,7 +21,7 @@ app.configure(function(){
   app.use(app.router);
 });
 
-app.configure('development', function(){
+app.configure('production', function(){
   app.use(express.errorHandler());
 });
 

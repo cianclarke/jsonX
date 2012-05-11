@@ -20,8 +20,8 @@ exports.j = function(req, res){
   var hash = req.params.hash;
   redisClient.get(hash, function(err, reply){
     if (reply){
-      req.body = JSON.stringify(reply);
-      exports.json(req, res);
+      var body = JSON.parse(reply);
+      res.send(generateAPIData(body));
     }else{
       res.send('No API with key ' + hash);
     }
@@ -31,9 +31,6 @@ exports.j = function(req, res){
 exports.json = function(req, res){
   var body = req.body,
   bodyString = JSON.stringify(body);
-  limit = (body.limit && body.limit<jsonLength) ? body.limit : 50,
-  fields = body.fields || ['FirstName', 'LastName', 'Email'],
-  returnType = body.type || "array";
 
   var md5 = crypto.createHash('md5');
   md5.update(bodyString);
@@ -46,9 +43,17 @@ exports.json = function(req, res){
     if (!reply){
       redisClient.set(hash, bodyString);
     }
+    res.redirect('/j/' + hash);
   });
+};
 
-  
+function generateAPIData(body){
+  body.limit = parseInt(body.limit);
+  var limit = (body.limit && body.limit<jsonLength) ? body.limit: 50,
+  fields = body.fields || ['FirstName', 'LastName', 'Email'],
+  returnType = body.type || "array";
+
+
   var data = (returnType==="array") ? [] : {};
   if (fields && fields.length>0){
     for (var i=0; (i<jsonLength && i<limit); i++){
@@ -67,17 +72,15 @@ exports.json = function(req, res){
       }else if(returnType==="map"){
         data[i] = obj;
       }
-      
+
     }
   }else{
     var data = json;
   }
-  
+
   if (limit && returnType=="array"){
     data = data.slice(0, limit);
   }
-  
-  
-  
-  res.send(data);
-};
+
+  return data;
+}
