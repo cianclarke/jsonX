@@ -4,6 +4,7 @@ fields = Object.keys(json[0]), // gives us an array of the fields from a sample 
 jsonLength = json.length,
 crypto = require('crypto'),
 redis = require('redis'),
+hash = require('../utils/hash'),
 redisClient = redis.createClient();
 /*
  * GET home page.
@@ -32,19 +33,28 @@ exports.json = function(req, res){
   var body = req.body,
   bodyString = JSON.stringify(body);
 
-  var md5 = crypto.createHash('md5');
+  // dont care about collissions - no need to hash
+  /*var md5 = crypto.createHash('md5');
   md5.update(bodyString);
-  var hash = md5.digest('hex');
+  var hash = md5.digest('hex');*/
 
-  redisClient.get(hash, function(err, reply){
-    if (err){
-      console.error('[redis error]: ' + err.toString());
-    }
-    if (!reply){
-      redisClient.set(hash, bodyString);
-    }
-    res.redirect('/j/' + hash);
-  });
+  shorten(bodyString);
+
+  function shorten(bodyString){
+    var shortURL = hash();
+    redisClient.get(shortURL, function(err, reply){
+      if (err){
+        console.error('[redis error]: ' + err.toString());
+      }
+      if (reply){
+        return shorten(bodyString);
+      }
+      redisClient.set(shortURL, bodyString);
+      res.redirect('/j/' + shortURL);
+    });
+  }
+
+
 };
 
 function generateAPIData(body){
