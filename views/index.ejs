@@ -3,44 +3,89 @@
   <head>
     <title><%= title %></title>
     <link rel='stylesheet' href='/css/style.css' />
-    <link rel='stylesheet' href='/bootstrap/less/bootstrap.css' />
+
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
     <script src="/js/jsonX.js"></script>
     <script src="bootstrap/js/bootstrap.js"></script>
+    <link href="css/prettify.css" type="text/css" rel="stylesheet" />
+    <script type="text/javascript" src="js/prettify.js"></script>
   </head>
-  <body>
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
+  <body data-spy="scroll">
+
+  <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="/"><%= title %></a>
+          <div class="nav-collapse">
+            <ul class="nav">
+              <li class="active"><a href="#gettingstarted">1. Getting Started</a></li>
+              <li><a href="#personaldetails">2. Personal Details</a></li>
+              <li><a href="#businessfields">3. Business Fields</a></li>
+              <li><a href="#customfields">4. Custom Fields</a></li>
+            </ul>
+          </div><!-- /.nav-collapse -->
+        </div>
+      </div><!-- /navbar-inner -->
+    </div>
+
+    <div class="hero-unit home" id="gettingstarted">
+
+          <pre class="prettyprint pull-right intro">
+        [
+          {
+            firstName: 'Cian', lastName: 'Clarke',
+            web: 'http://www.cianclarke.com',
+            country: 'Ireland'
+          }, {}...
+        ]
+          </pre>
+
+          <h2>Simple lightweight mock API's</h2>
+          <p >
+          A tool which allows you to generate a mock JSON data set.
+
+          </p>
+          <ul>
+            <li>Mock data in your apps</li>
+            <li>Choose from 12 sample fields (more soon!), and up to 5000 records</li>
+            <li>Usage stats</li>
+            <li>Sample Objective C, JQuery & Sencha code</li>
+            <li>Free!</li>
+          </ul>
+          <!--<p><a class="btn btn-primary btn-large">Get started &raquo;</a></p>-->
+
+
+
+    </div>
+
     <form method="post" action="/json" class="form-horizontal">
       <fieldset>
-      
+        <legend id="personaldetails">Personal Details</legend>
 
-      <legend>Personal Details</legend>
-
-      <% fields.forEach(function(field){ %>
-          <label class="checkbox">
-            <input type="checkbox" id="<%= field %>" name="fields" value="<%= field %>">
-            <%= field %>
-          </label>
-      <% }) %>
+        <% fields.forEach(function(field){ %>
+            <label class="checkbox">
+              <input type="checkbox" id="<%= field %>" name="fields" value="<%= field %>">
+              <%= field %>
+            </label>
+        <% }) %>
 
 
       </fieldset>
-     <!-- <fieldset>
-      <select name="fields" multiple="multiple" id="multiSelect">
-                  <option>FirstName</option>
-                  <option>LastName</option>
-                  <option>FullName</option>
-                  <option>Company</option>
-                  <option>Address</option>
-                  <option>City</option>
-                  <option>State</option>
-                  <option>ZIP</option>
-                  <option>Phone</option>
-                  <option>Fax</option>
-                  <option>Email</option>
-                  <option>Web Address</option>
-      </select><br />-->
+
+      <fieldset>
+        <legend id="businessfields">Business Fields</legend>
+
+      </fieldset>
+
+      <fieldset>
+        <legend id="customfields">Custom Fields</legend>
+      </fieldset>
+
       
       <label>Return Type</label>
       <div class="btn-group" data-toggle="buttons-radio">
@@ -55,6 +100,6 @@
       <button type="submit" class="btn btn-primary">Generate JSON</button>
       </fieldset>
     </form>
-    <a href="https://github.com/cianclarke/jsonX"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"></a>
+    <a href="https://github.com/cianclarke/jsonX"><img style="z-index: 10000; position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"></a>
   </body>
 </html>

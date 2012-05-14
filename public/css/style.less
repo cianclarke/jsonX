@@ -1,3 +1,5 @@
+@import "less/bootstrap.less";
+
 body {
   padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
@@ -6,3 +8,38 @@ body {
 a {
   color: #00B7FF;
 }
+
+.checkbox {
+  margin: 4px 11px;
+  width: 60px;
+  float: left;
+}
+
+fieldset {
+  width: 300px;
+}
+
+.hero-unit pre {
+  text-align: left;
+  font-size: 10px;
+}
+.hero-unit.api pre.intro , .her-unit.home pre.intro { width: 360px; }
+.hero-unit.home pre {
+  margin-top: 40px;
+}
+
+.hero-unit.api pre {
+  margin-top: 10px;
+}
+
+@grayDarker:            darken(@grayDark, 6.5%);
+@grayDark:              darken(@gray, 13.5%);
+@gray:                  #555;
+@grayLight:             desaturate(lighten(@gray, 26.5%), 50%); // TODO: Make this have a meaningful relationship to @gray
+@grayLighter:           #eee;
+@white:                 #fff;
+
+@navbarBackground: #00adff;
+@navbarBackgroundHighlight: #0095db;
+@navbarLinkColor: #ededed;
+@navbarLinkBackgroundActive: #333;

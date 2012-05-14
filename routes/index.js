@@ -4,8 +4,38 @@ fields = Object.keys(json[0]), // gives us an array of the fields from a sample 
 jsonLength = json.length,
 crypto = require('crypto'),
 redis = require('redis'),
-hash = require('../utils/hash'),
-redisClient = redis.createClient();
+hash = require('../utils/hash');
+
+
+// Redis local settings, overridden below if we're running in CloudFoundry
+var redisPort = 6379;
+var redisHost = '127.0.0.1';
+var redisPassword = '';
+
+if (process.env.VCAP_SERVICES) {
+  var vcapServices = JSON.parse(process.env.VCAP_SERVICES);
+  var cfRedis = vcapServices['redis-2.2'][0];
+  redisHost = cfRedis.credentials.hostname;
+  redisPort = cfRedis.credentials.port;
+  redisPassword = cfRedis.credentials.password;
+}
+
+
+var redisClient = redis.createClient(redisPort, redisHost);
+if (process.env.VCAP_SERVICES) {
+  redisClient.auth(redisPassword);
+}
+
+redisClient.on("connect", function () {
+  if (process.env.VCAP_SERVICES) {
+    redisClient.auth(redisPassword, function(err, res) {
+      //TODO
+    });
+  }
+});
+
+// End CF Redis Setup
+
 /*
  * GET home page.
  */
@@ -18,20 +48,71 @@ exports.index = function(req, res){
 };
 
 exports.j = function(req, res){
-  var hash = req.params.hash;
+  var hash = req.params.hash,
+  restype = (req.params.restype && req.params.restype.length>0) ? req.params.restype : 'json';
   redisClient.get(hash, function(err, reply){
     if (reply){
+      redisClient.incr('get_' + hash);
       var body = JSON.parse(reply);
-      res.send(generateAPIData(body));
+      var data = generateAPIData(body);
+      switch(restype.toLowerCase()){
+        case 'json':
+          res.send(data);
+          break;
+        case 'html':
+          var first = (data.length) ? data[0] : "Preview not available for map{} data";
+          res.render('api', {
+            title: 'jsonX',
+            preview: JSON.stringify(first),
+            data: data,
+            hash: hash,
+            urls: [
+              {
+                name: 'Here\'s your new API!',
+                desc: 'On this page, you\'ll find some data about how to get started with your new API. Or, if you want to skip the guide - here\'s the URL:',
+                url: 'http://jsonx.cloudfoundry.com/j/' + hash + '.json'
+              },
+              {
+                name: 'Statistics',
+                desc: 'To get statistics for your application, simply drop the .JSON and add /stats to the URL:',
+                url: 'http://jsonx.cloudfoundry.com/j/' + hash + '/stats'
+              },
+              {
+                name: 'This Page',
+                desc: 'To re-visit this page, simply replace .json with .html',
+                url: 'http://jsonx.cloudfoundry.com/j/' + hash + '.html'
+              }
+            ]
+          });
+          break;
+        default:
+          res.send(data);
+          break;
+      }
+      return;
     }else{
       res.send('No API with key ' + hash);
     }
   });
 };
 
+exports.stats = function(req, res){
+  var stat = req.params.stat || 'get_' + req.params.hash;
+  redisClient.get(stat, function(err, reply){
+    if (err || !reply){
+      res.send('No statistic found with key ' + stat);
+    }else{
+      res.send(reply);
+    }
+  });
+}
+
 exports.json = function(req, res){
   var body = req.body,
   bodyString = JSON.stringify(body);
+
+
+  redisClient.incr('apis');
 
   // dont care about collissions - no need to hash
   /*var md5 = crypto.createHash('md5');
@@ -50,7 +131,7 @@ exports.json = function(req, res){
         return shorten(bodyString);
       }
       redisClient.set(shortURL, bodyString);
-      res.redirect('/j/' + shortURL);
+      res.redirect('/j/' + shortURL + '.html');
     });
   }
 

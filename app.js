@@ -29,7 +29,11 @@ app.get('/', routes.index);
 
 app.post('/json', routes.json);
 
-app.get('/j/:hash', routes.j);
+app.get('/j/:hash.:restype?', routes.j);
+
+app.get('/j/:hash/stats', routes.stats);
+
+app.get('/stats/:stat', routes.stats);
 
 
 http.createServer(app).listen(process.env.VCAP_APP_PORT || 3000);

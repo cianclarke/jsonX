@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/css/style.css' />
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <script src="/js/jsonX.js"></script>
+    <script src="/bootstrap/js/bootstrap.js"></script>
+    <link href="/css/prettify.css" type="text/css" rel="stylesheet" />
+    <script type="text/javascript" src="/js/prettify.js"></script>
+  </head>
+  <body data-spy="scroll">
+
+  <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="/"><%= title %></a>
+
+        </div>
+      </div><!-- /navbar-inner -->
+    </div>
+
+    <div class="hero-unit api" id="gettingstarted">
+        <div class="pull-right">
+        <h3>Preview</h3>
+        Here's a sneak peak - the first record..
+          <pre class="prettyprint intro">
+            <%= preview %>
+          </pre>
+        </div>
+
+         <% urls.forEach(function(url){ %>
+           <h3> <%= url.name %> </h3>
+           <p>  <%= url.desc %> </p>
+           <div class="controls">
+              <div class="input-append">
+                <input class="span5" id="appendedInputButton" size="16" type="text" value="<%= url.url %>">
+                <button class="btn" type="button">Copy</button>
+                <button class="btn" type="button">Go</button>
+              </div>
+           </div>
+         <% }) %>
+
+         <h3> Sample Code: JQuery </h3>
+
+         <pre class="prettyprint">
+$.get('http://jsonx.cloudfoundry.com/j/<%= hash %>.json', function(data) {
+  $('.result').html(data);
+  alert('Load was performed.');
+});
+
+         </pre>
+
+         <h3> Sample Code: Objective C</h3>
+
+         <pre class="prettyprint">
+// uses ASIHTTPRequest - #import "ASIHTTPRequest.h"
+NSURL *url = [NSURL URLWithString:@"http://jsonx.cloudfoundry.com/j/<%= hash %>.json"];
+__block ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:url];
+[request setCompletionBlock:^{
+  // Use when fetching text data
+  NSString *apiData = [request responseString];
+  // use a JSOn framework to make use of apiData
+
+}];
+[request setFailedBlock:^{
+  NSError *error = [request error];
+}];
+[request startAsynchronous];
+         </pre>
+
+
+         <h3>Sample Code: Sencha</h3>
+         <pre class="prettyprint">
+// Here's a Sencha Store - connect it up to a DataView & some model!
+var store = new Ext.data.Store({
+  model: 'SomeModel',
+  autoLoad: true,
+  proxy: new Ext.data.AjaxProxy({
+      type: 'ajax',
+      url: 'http://jsonx.cloudfoundry.com/j/<%= hash %>.json'
+  })
+});
+
+         </pre>
+
+
+    </div>
+
+
+    <a href="https://github.com/cianclarke/jsonX"><img style="z-index: 10000; position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"></a>
+  </body>
+</html>
