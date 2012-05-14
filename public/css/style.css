@@ -4194,12 +4194,7 @@ fieldset {
   font-size: 10px;
 }
 .hero-unit.api pre.intro,
-.her-unit.home pre.intro {
+.hero-unit.home pre.intro {
   width: 360px;
-}
-.hero-unit.home pre {
-  margin-top: 40px;
-}
-.hero-unit.api pre {
   margin-top: 10px;
 }
